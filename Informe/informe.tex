@@ -41,19 +41,25 @@
 \tableofcontents
 \newpage
 
-\section{Introducción}
-Describa el objetivo del informe, el problema a resolver y el contexto del aprendizaje automático.
+\section{Ejercicio 1}
+En este insciso se pide separar los datos en conjuntos de entranamiento y evaluacion, donde no se debe utilizar la libreria \texttt{train\_test\_split} de \texttt{sklearn}.
 
-\section{Datos}
+Primero se realizo una exploracion de los datos, donde se observa que el dataset posee $200$ features, todas numericas, y $500$ filas.
+ Se observa que el dataset no tiene valores nulos y que ademas se trata de un problema desbalanceado, donde el $\%70$ de los datos pertenecen a la clase $1$ 
+ y el $\%$ restante pertenece a la clase $0$, por lo que no es necesario realizar un preprocesamiento de los datos. 
+ 
+ Se decide utilizar el $80\%$ de los datos para entrenamiento 
+ y el $20\%$ restante para evaluacion.
+\section{Ejercicio 2}
 Explique la fuente de los datos, su preprocesamiento y las características principales. Incluya gráficos si es necesario.
 
-\section{Metodología}
+\section{Ejercicio 3}
 Describa los algoritmos y técnicas de aprendizaje automático utilizados. Incluya ecuaciones relevantes y justifique sus elecciones.
 
-\section{Resultados}
+\section{Ejercicio 4}
 Presente los resultados obtenidos, como métricas de evaluación, gráficos de desempeño, etc.
 
-\section{Discusión}
+\section{Ejercicio 5}
 Analice los resultados, las limitaciones del modelo y posibles mejoras.
 
 \section{Conclusión}
