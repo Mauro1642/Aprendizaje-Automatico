@@ -1,5 +1,4 @@
 \documentclass[12pt,a4paper]{article}
-
 % Packages
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
@@ -17,6 +16,26 @@
 % Title and author
 \title{Informe de Aprendizaje Automático}
 \author{Nombre del Estudiante \\ Universidad \\ Curso de Aprendizaje Automático}
+\author{
+    Chavez, Mauro \\
+    \texttt{a@gmail.com}
+    \and
+    Lewkowicz, Iván \\
+    \texttt{a@gmail.com}
+    \and
+    Drelewicz, Santiago \\
+    \texttt{a@gmail.com}
+    \and
+    Torrez, Matías \\
+    \texttt{matiastorrez157@gmail.com}
+    \and
+    Culaciati, Dante \\
+    \texttt{a@gmail.com}
+}
+
+
+
+
 \date{\today}
 
 % Custom settings for code listings
@@ -38,20 +57,51 @@
 
 % Title page
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 
 \section{Ejercicio 1}
-En este insciso se pide separar los datos en conjuntos de entranamiento y evaluacion, donde no se debe utilizar la libreria \texttt{train\_test\_split} de \texttt{sklearn}.
+\par En este inciso se pide separar los datos en conjuntos de entrenamiento y evaluación, donde no se debe utilizar la libreria \texttt{train\_test\_split} de \texttt{sklearn}.
 
-Primero se realizo una exploracion de los datos, donde se observa que el dataset posee $200$ features, todas numericas, y $500$ filas.
- Se observa que el dataset no tiene valores nulos y que ademas se trata de un problema desbalanceado, donde el $\%70$ de los datos pertenecen a la clase $1$ 
- y el $\%$ restante pertenece a la clase $0$, por lo que no es necesario realizar un preprocesamiento de los datos. 
- 
- Se decide utilizar el $80\%$ de los datos para entrenamiento 
- y el $20\%$ restante para evaluacion.
+\par Primero se realizo una exploracion de los datos, donde se observa que el dataset posee $200$ features, todas numericas, y $500$ filas.
+Se observa que el dataset no tiene valores nulos y que ademas se trata de un problema desbalanceado, donde el $\%70$ de los datos pertenecen a la clase $1$ y el $\%$ restante pertenece a la clase $0$, por lo que no es necesario realizar un preprocesamiento de los datos. 
+Se decide entonces utilizar el $80\%$ de los datos para entrenamiento y el $20\%$ restante para evaluacion.
+
+\par Como la proporción de los datos es desbalanceada, realizamos un \texttt{stratified split} en la separación de los datos, procurando mantener la proporción del dataset original para los datos de entrenamiento y evaluación. 
+
+
 \section{Ejercicio 2}
-Explique la fuente de los datos, su preprocesamiento y las características principales. Incluya gráficos si es necesario.
+% Explique la fuente de los datos, su preprocesamiento y las características principales. Incluya gráficos si es necesario.
+\par Para la primera parte de este ejercicio, entrenamos un arból de decisión con altura máxima 3 y estimamos la performance del modelo con K fold cross validation para distintas métricas. 
+
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Permutación} & \textbf{Accuracy} (training) & \textbf{Accuracy} (validación) & \textbf{AUPRC} (training) & \textbf{AUPRC} (validación) & \textbf{AUC ROC} (training) & \textbf{AUC ROC} (validación) \\
+\hline
+1 & 0.8125   & 0.6375 & 0.6710 & 0.3226 & 0.8058 & 0.5298 \\
+\hline
+2 & 0.840625 & 0.5875 & 0.7337 & 0.3337 & 0.8458 & 0.5246 \\
+\hline
+3 & 0.825    & 0.6875 & 0.6431 & 0.3437 & 0.7513 & 0.5811 \\
+\hline
+4 & 0.81875  & 0.7    & 0.6573 & 0.3626 & 0.7877 & 0.5938 \\
+\hline
+5 & 0.84375  & 0.65   & 0.6958 & 0.4144 & 0.8085 & 0.5967 \\
+\hline  
+\textbf{Promedios} &  0.828125 & 0.6525 & 0.6802 & 0.3554 & 0.7998 & 0.5651 \\
+\hline
+\textbf{Global} & (NO) &  & (NO) &  & (NO) &  \\
+\hline
+\end{tabular}
+}
+\caption{Resultados por permutación y métricas}
+\label{tab:resultados-permutaciones}
+\end{table}
+
 
 \section{Ejercicio 3}
 Describa los algoritmos y técnicas de aprendizaje automático utilizados. Incluya ecuaciones relevantes y justifique sus elecciones.
