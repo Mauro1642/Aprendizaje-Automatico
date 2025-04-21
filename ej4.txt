@@ -1,0 +1,49 @@
+from sklearn.model_selection import learning_curve
+import matplotlib.pyplot as plt
+lda_model=LinearDiscriminantAnalysis()
+skf = StratifiedKFold(
+            n_splits=5,
+            shuffle=True,
+            random_state=42)
+train_sizes,train_scores,test_scores=learning_curve(lda_model,X=X_dev,y=y_dev,cv=skf,scoring="roc_auc")
+train_mean=train_scores.mean(axis=1)
+test_mean=test_scores.mean(axis=1)
+
+plt.figure(figsize=(8, 5))
+plt.plot(train_sizes, train_mean, 'o-', color='blue', label='Entrenamiento')
+plt.plot(train_sizes, test_mean, 'o-', color='green', label='Validación')
+plt.title('Curva de Aprendizaje - Linear Discriminant Analysis')
+plt.xlabel('Cantidad de datos de entrenamiento')
+plt.ylabel('AUC')
+plt.legend(loc='best')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
+from sklearn.ensemble import RandomForestClassifier
+hip_random_forest=["sqrt","log2",None]
+test_scores=[]
+train_scores=[]
+skf = StratifiedKFold(
+            n_splits=5,
+            shuffle=True,
+            random_state=42)
+for hip in hip_random_forest:
+    RandomF_model=RandomForestClassifier(n_estimators=200,max_features=hip)
+    scores=cross_validate(estimator=RandomF_model,X=X_dev,y=y_dev,cv=skf,
+                scoring='roc_auc',
+                return_train_score=True)
+    test_scores.append(scores["test_score"].mean())
+    train_scores.append(scores["train_score"].mean())
+val=["sqrt","log2","None"]
+plt.figure(figsize=(8, 5))
+plt.plot(val, test_scores, 'o-', color='blue', label='Test_scores')
+plt.plot(val, train_mean, 'o-', color='green', label='Training scores')
+plt.title('.')
+plt.xlabel("Max_features")
+plt.ylabel('AUC')
+plt.legend(loc='best')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
