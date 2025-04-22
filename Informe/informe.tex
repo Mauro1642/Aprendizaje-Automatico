@@ -74,10 +74,12 @@ Se decide entonces utilizar el $80\%$ de los datos para entrenamiento y el $20\%
 \section{Ejercicio 2}
 % Explique la fuente de los datos, su preprocesamiento y las características principales. Incluya gráficos si es necesario.
 \par Para la primera parte de este ejercicio, entrenamos un arból de decisión con altura máxima 3 y estimamos la performance del modelo con K fold cross validation para distintas métricas. 
+Las metricas utilizadas son \textit{Accuracy}, \textit{AUPRC} y \textit{AUC ROC} y se realizo un \textit{K-fold} con $K=5$.
+\par En la tabla \ref{tab:resultados-permutaciones} se muestran los resultados obtenidos para cada una de las $5$ permutaciones de los datos, asi como el promedio de cada métrica para todas las permutaciones y el resultado global,
+el cual se obtiene al calcular las metricas utilizando el conjuto de predicciones formado a partir de concatenar las predicciones de cada fold.
 
 \begin{table}[H]
 \centering
-\resizebox{\textwidth}{!}{%
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
 \textbf{Permutación} & \textbf{Accuracy} (training) & \textbf{Accuracy} (validación) & \textbf{AUPRC} (training) & \textbf{AUPRC} (validación) & \textbf{AUC ROC} (training) & \textbf{AUC ROC} (validación) \\
@@ -97,11 +99,39 @@ Se decide entonces utilizar el $80\%$ de los datos para entrenamiento y el $20\%
 \textbf{Global} & (NO) &  & (NO) &  & (NO) &  \\
 \hline
 \end{tabular}
-}
 \caption{Resultados por permutación y métricas}
 \label{tab:resultados-permutaciones}
 \end{table}
 
+
+Se observa que este modelo presenta un buen desempeño en el conjunto de entrenamiento, pero su desempeño en el conjunto de validación es bastante bajo, lo que podría indicar que el modelo está sobreajustado a los datos de entrenamiento.
+
+Para la segunda parte del ejercicio, se exploraron diferentes combinaciones de hiperparámetros para el modelo de árbol de decisión, utilizando \texttt{GridSearchCV} de \texttt{sklearn}.
+ Se probaron diferentes valores para la profundidad máxima del árbol y el cirterio de corte. Se utilizó \texttt{StratifiedKFold} con $K=5$ para la validación cruzada.
+En la tabla \ref{tab:resultados-arbol-gridsearch-1} se muestran los resultados obtenidos para cada combinación de hiperparámetros, así como el promedio de \textit{Accuracy} para cada combinación.
+%no esta bien completa la tabla
+ \begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Altura máxima} & \textbf{Criterio de corte} &\textbf{Accuracy} (training) &\textbf{Accuracy} (validación)  \\
+    \hline
+    3 & Gini   & 0.6375 & 0.6710  \\
+    \hline
+    5 & Gini & 0.5875 & 0.7337  \\
+    \hline
+    Infinito & Gini    & 0.6875 & 0.6431 \\
+    \hline
+    3 & Entropía & 0.7    & 0.6573  \\
+    \hline
+    5 & Entropía  & 0.65   & 0.6958  \\
+    \hline  
+    Infinito &  Entropía &  0.828125 &  0.828125 \\
+    \hline
+    \end{tabular}
+    \caption{Resultados por permutación y métricas}
+    \label{tab:resultados-arbol-gridsearch-1}
+    \end{table}
 
 \section{Ejercicio 3}
 Describa los algoritmos y técnicas de aprendizaje automático utilizados. Incluya ecuaciones relevantes y justifique sus elecciones.
