@@ -132,9 +132,21 @@ En la tabla \ref{tab:resultados-arbol-gridsearch-1} se muestran los resultados o
 \end{table}
 
 \section{Ejercicio 3}
-Describa los algoritmos y técnicas de aprendizaje automático utilizados. Incluya ecuaciones relevantes y justifique sus elecciones.
+En esta seccion se exploraron diferentes combinaciones de hiperparametros para los modelos de arboles de decision, \textit{KNN} y \textit{SVM} y se los comparo contra los algoritmos \textit{LDA} y \textit{GaussianNB} sin realizar una busqueda de hiperparametros
+. Se buscó identificar el mejor modelo de cada familia de algoritmos buscando maximizar el \textit{AUC ROC}.
 
-\section{Ejercicio 4}
+Para realizar la busqueda de hiperparametros y la estimacion del rendimieinto de los modelos se utilizo la tecnica de \textit{Nested Cross Validation}, utilizando \textit{RondomizedSearchCV} para la busqueda de hiperparametros y, al igual que en la seccion anterior,
+se utilizo \textit{StratifiedKFold} para la creacion de los \textit{Kfolds}.
+\textit{Nested Cross Validation} es una técnica que permite evaluar el rendimiento de un modelo de aprendizaje automático mientras se optimizan sus hiperparámetros. En este enfoque, se utilizan dos bucles de validación cruzada: uno externo para evaluar el rendimiento del modelo y otro interno para ajustar los hiperparámetros. Esto ayuda a evitar el sobreajuste
+ y proporciona una estimación más precisa del rendimiento del modelo en datos no vistos,~en la figura \ref{fig:nested_cross_validation} se muestra un esquema de como se realiza este proceso.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imagenes/nested-kfold-cv.png}
+    \caption{Esquema de \textit{Nested Cross Validation}, donde el bucle interno se utiliza para la búsqueda de hiperparámetros y el bucle externo para la evaluación del rendimiento.}
+    \label{fig:nested_cross_validation}
+\end{figure}
+ \section{Ejercicio 4}
 Presente los resultados obtenidos, como métricas de evaluación, gráficos de desempeño, etc.
 
 \section{Ejercicio 5}
