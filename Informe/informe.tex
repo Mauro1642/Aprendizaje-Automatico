@@ -186,10 +186,18 @@ A continuación se detallan los hiperparámetros utilizados junto con sus respec
 A pesar de que para comparar se utilizaron los algoritmos de \textit{LDA} y \textit{GaussianNB} sin realizar una búsqueda de hiperparámetros, se mencionan los posibles hiperparámetros
 que podrían ser utilizados para estos algoritmos:
 \begin{itemize}
-    \item \texttt{solver}: Método de optimización, se probaron los valores \texttt{svd}, \texttt{lsqr} y \texttt{eigen}.
-    \item \texttt{priors}: Probabilidades a priori de las clases, se probaron valores aleatorios entre $0$ y $1$.
-    \item \texttt{shrinkage}: Regularización, se probaron valores aleatorios entre $0$ y $1$.
+    \item \textsl{LDA}:
+    \begin{itemize}
+        \item \texttt{solver}: Algoritmo de optimización, se pueden probar los valores \texttt{svd}, \texttt{lsqr} y \texttt{eigen}.
+        \item \texttt{shrinkage}: Método de regularización, se pueden probar los valores \texttt{auto} y \texttt{None}.
+        \item \texttt{tol}: Tolerancia para la convergencia, se pueden probar valores aleatorios entre $0.0001$ y $0.1$.
+    \end{itemize}
+    \item \textsl{GaussianNB}:
+    \begin{itemize}
+        \item \texttt{var\_smoothing}: Parámetro de suavizado de varianza, se pueden probar valores aleatorios entre $1e-9$ y $1e-1$.
+    \end{itemize}
 \end{itemize}
+
 \subsection{Resultados}
 
  \section{Ejercicio 4}
