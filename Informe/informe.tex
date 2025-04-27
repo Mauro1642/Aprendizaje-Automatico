@@ -148,7 +148,7 @@ se utilizo \textit{StratifiedKFold} para la creacion de los \textit{Kfolds}.
 \end{figure}
 
 \subsection{Arbol de decisión}
-Los hiperparametros utilizados fueron
+A continuación se detallan los hiperparámetros utilizados junto con sus respectivos valores de prueba:
 
 \begin{itemize}
     \item \texttt{max\_depth} (int o Ninguno): Altura máxima del árbol, mientras mas profundo sea el árbol, más complejo será el modelo y habra mas posibilidades de sobreajusta.
@@ -160,20 +160,36 @@ Los hiperparametros utilizados fueron
 \end{itemize}
 \subsection{\textit{KNN}}
 
-Los hiperparametros utilizados fueron:
+A continuación se detallan los hiperparámetros utilizados junto con sus respectivos valores de prueba:
 
 \begin{itemize}
     \item \texttt{n\_neighbors}: Cantidad de vecinos a considerar, se probaron valores aleatorios en el rango de $3$ a $50$.
     \item \texttt{weights}: Estrategia de ponderación, se probaron los valores \texttt{uniform} y \texttt{distance}.
-    \item \texttt{metric}: Métrica de distancia, se probaron las métricas \texttt{euclidean}, \texttt{manhattan} y \texttt{minkowski}.
-    \item \texttt{p}: Potencia de la métrica de Minkowski, se probaron los valores $1$, $2$ y $3$.
+    \item \texttt{metric}: Métrica de distancia, se probaron las métricas \texttt{euclidean}, \texttt{manhattan}, \texttt{minkowski} y \texttt{cosine}.
+    \item \texttt{p}: Potencia de la métrica de Minkowski, se probaron valores aleatorios entre $1$ y $4$.
     \item \texttt{algorithm}: Algoritmo de búsqueda de vecinos, se probaron los valores \texttt{auto}, \texttt{ball\_tree}, \texttt{kd\_tree} y \texttt{brute}.
 \end{itemize}
 
 \subsection{\textit{SVM}}
+
+A continuación se detallan los hiperparámetros utilizados junto con sus respectivos valores de prueba:
+\begin{itemize}
+    \item \texttt{C}: Parámetro de regularización, se probaron valores aleatorios entre $0.1$ y $10$.
+    \item \texttt{kernel}: Tipo de kernel a utilizar, se probaron los valores \texttt{linear}, \texttt{poly}, \texttt{rbf} y \texttt{sigmoid}.
+    \item \texttt{degree}: Grado del polinomio, se probaron valores aleatorios entre $1$ y $5$.
+    \item \texttt{gamma}: Coeficiente del kernel, se probaron valores aleatorios entre $0.01$ y $1$.
+    \item \texttt{coef0}: Término independiente en el kernel, se probaron valores aleatorios entre $0$ y $1$.
+\end{itemize}
+
 \subsection{\textit{LDA} y \textit{GaussianNB}}
 
-
+A pesar de que para comparar se utilizaron los algoritmos de \textit{LDA} y \textit{GaussianNB} sin realizar una búsqueda de hiperparámetros, se mencionan los posibles hiperparámetros
+que podrían ser utilizados para estos algoritmos:
+\begin{itemize}
+    \item \texttt{solver}: Método de optimización, se probaron los valores \texttt{svd}, \texttt{lsqr} y \texttt{eigen}.
+    \item \texttt{priors}: Probabilidades a priori de las clases, se probaron valores aleatorios entre $0$ y $1$.
+    \item \texttt{shrinkage}: Regularización, se probaron valores aleatorios entre $0$ y $1$.
+\end{itemize}
 \subsection{Resultados}
 
  \section{Ejercicio 4}
