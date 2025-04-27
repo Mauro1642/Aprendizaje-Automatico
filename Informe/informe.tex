@@ -146,6 +146,36 @@ se utilizo \textit{StratifiedKFold} para la creacion de los \textit{Kfolds}.
     \caption{Esquema de \textit{Nested Cross Validation}, donde el bucle interno se utiliza para la búsqueda de hiperparámetros y el bucle externo para la evaluación del rendimiento.}
     \label{fig:nested_cross_validation}
 \end{figure}
+
+\subsection{Arbol de decisión}
+Los hiperparametros utilizados fueron
+
+\begin{itemize}
+    \item \texttt{max\_depth} (int o Ninguno): Altura máxima del árbol, mientras mas profundo sea el árbol, más complejo será el modelo y habra mas posibilidades de sobreajusta.
+    \item \texttt{criterion} ({gini, entropia}): Criterio de corte,
+    \item \texttt{splitter}: Estrategia de división, se probaron los valores \texttt{best} y \texttt{random}.
+    \item \texttt{min\_samples\_leaf}: Cantidad mínima de muestras por hoja, se probaron los valores $1$, $2$ y $3$.
+    \item \texttt{min\_samples\_split}: Cantidad mínima de muestras para dividir un nodo, se probaron los valores $2$, $3$ y $4$.
+    \item \texttt{class\_weight}: Peso de las clases, se probaron los valores \texttt{balanced} y \texttt{None}.
+\end{itemize}
+\subsection{\textit{KNN}}
+
+Los hiperparametros utilizados fueron:
+
+\begin{itemize}
+    \item \texttt{n\_neighbors}: Cantidad de vecinos a considerar, se probaron valores aleatorios en el rango de $3$ a $50$.
+    \item \texttt{weights}: Estrategia de ponderación, se probaron los valores \texttt{uniform} y \texttt{distance}.
+    \item \texttt{metric}: Métrica de distancia, se probaron las métricas \texttt{euclidean}, \texttt{manhattan} y \texttt{minkowski}.
+    \item \texttt{p}: Potencia de la métrica de Minkowski, se probaron los valores $1$, $2$ y $3$.
+    \item \texttt{algorithm}: Algoritmo de búsqueda de vecinos, se probaron los valores \texttt{auto}, \texttt{ball\_tree}, \texttt{kd\_tree} y \texttt{brute}.
+\end{itemize}
+
+\subsection{\textit{SVM}}
+\subsection{\textit{LDA} y \textit{GaussianNB}}
+
+
+\subsection{Resultados}
+
  \section{Ejercicio 4}
 Presente los resultados obtenidos, como métricas de evaluación, gráficos de desempeño, etc.
 
