@@ -9,6 +9,9 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
 
 % Page layout
 \geometry{margin=1in}
@@ -78,21 +81,21 @@ el cual se obtiene al calcular las metricas utilizando el conjuto de prediccione
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|P{2cm}|P{2.3cm}|P{1.8cm}|P{2.2cm}|P{2.1cm}|P{2cm}|}
     \hline
-    \textbf{Permutación} & \textbf{Accuracy} (training) & \textbf{Accuracy} (validación) & \textbf{AUPRC} (training) & \textbf{AUPRC} (validación) & \textbf{AUC ROC} (training) & \textbf{AUC ROC} (validación) \\
+    \textbf{Permutación} & \textbf{Accuracy} (training) & \textbf{Accuracy} (validación) & \textbf{AUPRC} (training) & \textbf{AUPRC} (validación) & \textbf{AUCROC} (training) & \textbf{AUCROC} (validación) \\
     \hline
     1 & 0.8125   & 0.6375 & 0.6710 & 0.3226 & 0.8058 & 0.5298 \\
     \hline
-    2 & 0.840625 & 0.5875 & 0.7337 & 0.3337 & 0.8458 & 0.5246 \\
+    2 & 0.8406 & 0.5875 & 0.7337 & 0.3337 & 0.8458 & 0.5246 \\
     \hline
     3 & 0.825    & 0.6875 & 0.6431 & 0.3437 & 0.7513 & 0.5811 \\
     \hline
-    4 & 0.81875  & 0.7    & 0.6573 & 0.3626 & 0.7877 & 0.5938 \\
+    4 & 0.8188  & 0.7    & 0.6573 & 0.3626 & 0.7877 & 0.5938 \\
     \hline
-    5 & 0.84375  & 0.65   & 0.6958 & 0.4144 & 0.8085 & 0.5967 \\
+    5 & 0.8438  & 0.65   & 0.6958 & 0.4144 & 0.8085 & 0.5967 \\
     \hline  
-    \textbf{Promedios} &  0.828125 & 0.6525 & 0.6802 & 0.3554 & 0.7998 & 0.5651 \\
+    \textbf{Promedios} &  0.8281 & 0.6525 & 0.6802 & 0.3554 & 0.7998 & 0.5651 \\
     \hline
     \textbf{Global} & (NO) &  & (NO) &  & (NO) &  \\
     \hline
@@ -132,7 +135,91 @@ En la tabla \ref{tab:resultados-arbol-gridsearch-1} se muestran los resultados o
 \end{table}
 
 \section{Ejercicio 3}
-Describa los algoritmos y técnicas de aprendizaje automático utilizados. Incluya ecuaciones relevantes y justifique sus elecciones.
+\par En el tercer ejercicio compararemos distintas combinaciones de algoritmos, con diferentes configuraciones a fin de encontrar el mejor modelo para cada familia de algoritmo. La métrica a usar para evaluar estas combinaciones será AUCROC. Por otro lado, para estimar la performance utilizaremos Nested Cross Validation, ya que de esta forma no elegimos hiperparámetros y entrenamos sobre el mismo fold. En su lugar para cada modelo a evaluar, realizamos \textit{Stratified-CV} sobre nuestros datos, y a su vez realizamos en cada fold \textit{Stratified 4-Fold} nuevamente pero esta vez para probar distintos hiperparámetros. Luego elegimos los mejores hiper parámetros y evaluamos en un fold externo.
+
+\subsection*{Árboles de decisión}
+\par En nuestra búsqueda de hiperparámetros, tuvimos en cuenta las siguientes posibilidades:
+\begin{itemize}
+    \item Función de ganancia: Gini, Entropía
+    \item Splitter: Best, Random
+    \item Máxima Profundidad: Números aleatorios entre 1 y 20
+    \item Cantidad mínima de ejemplares por división: Números aleatorios entre 1 y 20
+    \item Cantidad mínima de ejemplares por hoja: Números aleatorios entre 1 y 20
+    \item Pesos por clase: Ninguno, Balanceados
+\end{itemize}
+% Detallar elección de espacio de búsqueda
+\par  Luego de realizar Nested CV con 500 iteraciones, encontramos que la mejor combinación de hiperparámetros es la siguiente
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Hiperparámetro} & \textbf{Valor} \\
+    \hline
+    Class Weight & Balanced \\
+    Criterion & Entropy \\
+    Max Depth & 19 \\
+    Min Samples Leaf & 16 \\
+    Min Samples Split & 8 \\
+    Splitter & Best \\
+    \hline
+    \textbf{ROC AUC Promedio} & 0.581 \\
+    \textbf{Varianza} & 0.069 \\
+    \textbf{ROC AUC Test} & 0.662 \\
+    \hline
+    \end{tabular}
+    \caption{Mejores hiperparámetros encontrados para árboles de decisión.}
+    \label{tab:mejores-hiperparametros-dtree}
+\end{table}
+
+% Deberíamos explicar qué rango de hiperparámetros exploramos y por qué
+
+\subsection*{KNN} 
+\par Para KNN encontramos que la mejor combinación de hiperparámetros es la siguiente
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Hiperparámetro} & \textbf{Valor} \\
+    \hline
+    Metric & Manhattan \\
+    N-Neighbors & 9 \\
+    P & 1 \\
+    Weights & distance \\
+    \hline
+    \textbf{ROC AUC Promedio} & 0.859 \\
+    \textbf{Varianza} & 0.063 \\
+    \textbf{ROC AUC Test} & 0.836 \\
+    \hline
+    \end{tabular}
+    \caption{Mejores hiperparámetros encontrados para KNN.}
+    \label{tab:mejores-hiperparametros-knn}
+\end{table}
+
+\subsection*{Support Vector Machines}
+
+\par Para SVM encontramos que la mejor combinación de hiperparámetros es la siguiente
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Hiperparámetro} & \textbf{Valor} \\
+    \hline
+    C & 141.9443 \\
+    Class Weight & Ninguno \\
+    Gamma & 0.0001655355812491995 \\
+    Kernel & Radius Based Function \\
+    \hline
+    \textbf{ROC AUC Promedio} & 0.921 \\
+    \textbf{Varianza} & 0.020 \\
+    \textbf{ROC AUC Test} & 0.914 \\
+    \hline
+    \end{tabular}
+    \caption{Mejores hiperparámetros encontrados para SVM.}
+    \label{tab:mejores-hiperparametros-svm}
+\end{table}
+
 
 \section{Ejercicio 4}
 Presente los resultados obtenidos, como métricas de evaluación, gráficos de desempeño, etc.
