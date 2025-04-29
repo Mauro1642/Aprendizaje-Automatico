@@ -72,7 +72,7 @@ Se decide entonces utilizar el $80\%$ de los datos para entrenamiento y el $20\%
 \par Para la primera parte de este ejercicio, entrenamos un arból de decisión con altura máxima 3 y estimamos la performance del modelo con K fold cross validation para distintas métricas. 
 Las metricas utilizadas son \textit{Accuracy}, \textit{AUPRC} y \textit{AUC ROC} y se realizo un \textit{K-fold} con $K=5$.
 \par En la tabla \ref{tab:resultados-permutaciones} se muestran los resultados obtenidos para cada una de las $5$ permutaciones de los datos, asi como el promedio de cada métrica para todas las permutaciones y el resultado global,
-el cual se obtiene al calcular las metricas utilizando el conjuto de predicciones formado a partir de concatenar las predicciones de cada fold.
+el cual se obtiene al calcular las métricas utilizando el conjunto de predicciones formado a partir de concatenar las predicciones de cada fold.
 
 \begin{table}[H]
     \centering
@@ -230,15 +230,15 @@ En la tabla \ref{tab:resultados-modelos} se muestran los resultados obtenidos pa
     \hline
     \textbf{Modelo}  & Mejor hiperparámetros & \textbf{AUC ROC} \\
     \hline
-    Árbol de decisión & 0.7998 & 0.0254 \\
+    Árbol de decisión & \texttt{class\_weight}= None, \texttt{criterion}=\texttt{entropy}, \texttt{max\_depth}=6, \texttt{max\_features}=0.3056, \texttt{min\_samples\_leaf}=0.1909, \texttt{min\_samples\_split}=0.2684 & 0.579  \\
     \hline
-    KNN & 0.8125 & 0.0213 \\
+    KNN & `algorithm`=`brute`, `metric`=`cosine`, `n\_neighbors`=8, `weights`=`distance` & $0.819$ \\
     \hline
-    SVM & 0.8250 & 0.0197 \\
+    SVM & C=$0.171$, coef0=0.069,degree=$4$, gamma='scale', 'kernel'= 'poly' & $0.844$ \\
     \hline
-    LDA & Modelo base & 0.0221 \\
+    LDA & Modelo base & $0.7257$\\
     \hline
-    GaussianNB & Modelo base & 0.0209 \\
+    GaussianNB & Modelo base & $0.7638$ \\
     \hline
     \end{tabular}
     \caption{\textit{AUC ROC} de los modelos probados junto con sus mejores hiperparámetros.}
@@ -247,13 +247,12 @@ En la tabla \ref{tab:resultados-modelos} se muestran los resultados obtenidos pa
     
  \end{table}
 
- P
-
- \section{Ejercicio 4}
-Presente los resultados obtenidos, como métricas de evaluación, gráficos de desempeño, etc.
+ Se observa que el mejor modelo en terminos de \textit{AUC ROC} es \textit{SVM} con un kernel polinomico de grado 4, seguido por \textit{KNN}. Esto era esperable, 
+ ya que tanto \textit{SVM} como \textit{KNN} son algortimos que pueden captar relaciones no lineales en los datos.
+\section{Ejercicio 4}
 
 \section{Ejercicio 5}
-Analice los resultados, las limitaciones del modelo y posibles mejoras.
+En base a todo lo anteriormente mencionado, se decide utilizar el modelo de \textit{SVM} con kernel polinómico de grado 4 para realizar la estimacion del \textit{AUC ROC} a reportar sobre el conjunto de evaluacion que se separó en el ejercicio 1
 
 \section{Conclusión}
 Resuma los hallazgos principales y las conclusiones del informe.
