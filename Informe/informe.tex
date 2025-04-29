@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 % Packages
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
@@ -36,7 +36,6 @@
 
 \date{\today}
 
-% Custom settings for code listings
 \lstset{
     basicstyle=\ttfamily\small,
     backgroundcolor=\color{gray!10},
@@ -55,8 +54,7 @@
 
 % Title page
 \maketitle
-\newpage
-\tableofcontents
+
 \newpage
 
 \section{Ejercicio 1}
@@ -78,6 +76,7 @@ el cual se obtiene al calcular las metricas utilizando el conjuto de prediccione
 
 \begin{table}[H]
     \centering
+    \scalebox{0.62}{ % Adjust the scale factor as needed
     \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
     \textbf{Permutación} & \textbf{Accuracy} (training) & \textbf{Accuracy} (validación) & \textbf{AUPRC} (training) & \textbf{AUPRC} (validación) & \textbf{AUC ROC} (training) & \textbf{AUC ROC} (validación) \\
@@ -97,8 +96,9 @@ el cual se obtiene al calcular las metricas utilizando el conjuto de prediccione
     \textbf{Global} & (NO) &  & (NO) &  & (NO) &  \\
     \hline
     \end{tabular}
-\caption{Resultados por permutación y métricas}
-\label{tab:resultados-permutaciones}
+    }
+    \caption{Resultados por permutación y métricas}
+    \label{tab:resultados-permutaciones}
 \end{table}
 
 
@@ -132,8 +132,11 @@ En la tabla \ref{tab:resultados-arbol-gridsearch-1} se muestran los resultados o
 \end{table}
 
 \section{Ejercicio 3}
+
 En esta seccion se exploraron diferentes combinaciones de hiperparametros para los modelos de arboles de decision, \textit{KNN} y \textit{SVM} y se los comparo contra los algoritmos \textit{LDA} y \textit{GaussianNB} sin realizar una busqueda de hiperparametros
 . Se buscó identificar el mejor modelo de cada familia de algoritmos buscando maximizar el \textit{AUC ROC}.
+
+\subsection{Metodologia} \label{subsec:metodologia}
 
 Para realizar la busqueda de hiperparametros y la estimacion del rendimieinto de los modelos se utilizo la tecnica de \textit{Nested Cross Validation}, utilizando \textit{RondomizedSearchCV} para la busqueda de hiperparametros y, al igual que en la seccion anterior,
 se utilizo \textit{StratifiedKFold} para la creacion de los \textit{Kfolds}.
@@ -147,17 +150,28 @@ se utilizo \textit{StratifiedKFold} para la creacion de los \textit{Kfolds}.
     \label{fig:nested_cross_validation}
 \end{figure}
 
+Para poder asegurar que los resultados sean reproducibles, se utilizó un valor fijo para la semilla aleatoria en la creación de los \textit{Kfolds} 
+y en la búsqueda de hiperparámetros. Para asegurar una buena exploración del espacio de hiperparámetros se realizaron $150$ iteraciones de \textit{RandomizedSearchCV}  con semilla fija.
+
+Para el caso de los algortimos \textit{SVM} y \textit{KNN} se aplico una normalizacion de los datos, utilizando \texttt{StandardScaler} de \texttt{sklearn}, para asegurar que todas las features tengan la misma escala y evitar que algunas características dominen el proceso de entrenamiento. Ya que a diferencia
+de los arboles de decision, estos algoritmos son sensibles a la escala de los datos.
+
 \subsection{Arbol de decisión}
 A continuación se detallan los hiperparámetros utilizados junto con sus respectivos valores de prueba:
 
 \begin{itemize}
     \item \texttt{max\_depth} (int o Ninguno): Altura máxima del árbol, mientras mas profundo sea el árbol, más complejo será el modelo y habra mas posibilidades de sobreajusta.
     \item \texttt{criterion} ({gini, entropia}): Criterio de corte,
-    \item \texttt{splitter}: Estrategia de división, se probaron los valores \texttt{best} y \texttt{random}.
-    \item \texttt{min\_samples\_leaf}: Cantidad mínima de muestras por hoja, se probaron los valores $1$, $2$ y $3$.
-    \item \texttt{min\_samples\_split}: Cantidad mínima de muestras para dividir un nodo, se probaron los valores $2$, $3$ y $4$.
+    \item \texttt{min\_samples\_leaf}: Cantidad mínima de muestras por hoja, se probaron valores entre $0$ y $1.0$ con una distribucion uniforme. Este rango represnte la fraccion de datos a considerar sobre el total
+    \item \texttt{min\_samples\_split}: Cantidad mínima de muestras para dividir un nodo, se probaron valores entre $0$ y $1.0$ con una distribucion uniforme. Este rango represnte la fraccion de datos a considerar sobre el total
     \item \texttt{class\_weight}: Peso de las clases, se probaron los valores \texttt{balanced} y \texttt{None}.
+    \item \texttt{max\_features}: Cantidad máxima de features a considerar para cada división, se probaron los valores \texttt{sqrt}, \texttt{log2} y \texttt{None}.
 \end{itemize}
+
+Para el caso del hiperparametro \texttt{max\_depth} el rango elegido busca tratar de explorar tanto arboles cortos y profundos. Se probaron los criterios de Gini y entropia ya que, si bien ambos 
+son usados como criterios de corte para el arbol, representan cosas diferente. Mientras Gini se puede ineterpretar como una medida de impureza al clasificar,la entropia se puede interpretar como una medida de incertidumbre.
+Los rangos de \texttt{min\_samples\_leaf} y \texttt{min\_samples\_split} tratan de cubrir todo el rango de proporciones de los datos. El hiperparametro \textit{class\_weight} maneja el peso asignado a cada clase,las elecciones posibles buscan estudiar si balancear los pesos a partir de la distribucion de clases mejora el modelo o, si a pesar de ser un problema imbalanceado, el asignarles igual peso a amb
+as clases mejora el desempeño del arbol.
 \subsection{\textit{KNN}}
 
 A continuación se detallan los hiperparámetros utilizados junto con sus respectivos valores de prueba:
@@ -168,18 +182,26 @@ A continuación se detallan los hiperparámetros utilizados junto con sus respec
     \item \texttt{metric}: Métrica de distancia, se probaron las métricas \texttt{euclidean}, \texttt{manhattan}, \texttt{minkowski} y \texttt{cosine}.
     \item \texttt{p}: Potencia de la métrica de Minkowski, se probaron valores aleatorios entre $1$ y $4$.
     \item \texttt{algorithm}: Algoritmo de búsqueda de vecinos, se probaron los valores \texttt{auto}, \texttt{ball\_tree}, \texttt{kd\_tree} y \texttt{brute}.
+    \item 
 \end{itemize}
-
+Para el caso de la seleccion de rango de \texttt{n\_neighbors}, sabiendo de antemano el tamaño del dataset de desarollo , el cual era de $350$ filas, 
+se decidio probar un rango suficientemente grande de vecinos, donde el mayor numero posible es $50$ lo cual equivale a un $14\%$ de los datos. En el caso de los pesos,
+ se decidio probar tanto la ponderacion uniforme como la ponderacion por distancia, ya que en el caso de que los datos esten desbalanceados, la ponderacion por distancia puede ayudar a mejorar el desempeño del modelo.
+Se probaron diferentes metricas de distancia, . La eleccion de valores para el hiperparametro del algoritmo busca explicitar los algoritmos a utilizar, ya que por defecto \textit{KNN} utiliza el algoritmo \texttt{auto} 
+que selecciona el mejor algortimos y se busco probar todas las opciones posibles.
 \subsection{\textit{SVM}}
 
 A continuación se detallan los hiperparámetros utilizados junto con sus respectivos valores de prueba:
 \begin{itemize}
-    \item \texttt{C}: Parámetro de regularización, se probaron valores aleatorios entre $0.1$ y $10$.
+    \item \texttt{C}: Parámetro de regularización, se probaron valores aleatorios entre $0.001$ y $1000$.
     \item \texttt{kernel}: Tipo de kernel a utilizar, se probaron los valores \texttt{linear}, \texttt{poly}, \texttt{rbf} y \texttt{sigmoid}.
     \item \texttt{degree}: Grado del polinomio, se probaron valores aleatorios entre $1$ y $5$.
     \item \texttt{gamma}: Coeficiente del kernel, se probaron valores aleatorios entre $0.01$ y $1$.
-    \item \texttt{coef0}: Término independiente en el kernel, se probaron valores aleatorios entre $0$ y $1$.
 \end{itemize}
+
+El valor de C se elijo de tal forma que se busque explorar tanto un modelo con alta regularizacion como uno con baja regularizacion. Debido a que la dimensionaldiad del dataset es alta, 
+se decidio probar diferntes tipos de kernels, ya que el kernel lineal puede no ser el mejor para este tipo de datos.
+El rango de valores para el hiperparametro \texttt{degree} se eligio para poder darle libertad de complejidad al modelo en el caso del kernel polinomial.
 
 \subsection{\textit{LDA} y \textit{GaussianNB}}
 
@@ -199,6 +221,33 @@ que podrían ser utilizados para estos algoritmos:
 \end{itemize}
 
 \subsection{Resultados}
+En la tabla \ref{tab:resultados-modelos} se muestran los resultados obtenidos para cada modelo, junto con el promedio del \textit{AUC ROC} y su desviacion estandar. Obtenidos a partir del metodo
+ de \textit{Repeated-KFold NestedCV} mencionado en la seccion \ref{subsec:metodologia}.
+
+ \begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Modelo}  & Mejor hiperparámetros & \textbf{AUC ROC} \\
+    \hline
+    Árbol de decisión & 0.7998 & 0.0254 \\
+    \hline
+    KNN & 0.8125 & 0.0213 \\
+    \hline
+    SVM & 0.8250 & 0.0197 \\
+    \hline
+    LDA & Modelo base & 0.0221 \\
+    \hline
+    GaussianNB & Modelo base & 0.0209 \\
+    \hline
+    \end{tabular}
+    \caption{\textit{AUC ROC} de los modelos probados junto con sus mejores hiperparámetros.}
+     
+    \label{tab:resultados-modelos}
+    
+ \end{table}
+
+ P
 
  \section{Ejercicio 4}
 Presente los resultados obtenidos, como métricas de evaluación, gráficos de desempeño, etc.
